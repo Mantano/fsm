@@ -3,10 +3,7 @@ import 'package:fsm/fsm.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-part 'fsm_test.g.dart';
-
-@Sealed()
-abstract class State with SealedState {}
+abstract class State {}
 
 class Solid extends State {}
 
@@ -14,8 +11,7 @@ class Liquid extends State {}
 
 class Gas extends State {}
 
-@Sealed()
-abstract class Event with SealedEvent {}
+abstract class Event {}
 
 class OnMelted extends Event {}
 
@@ -25,8 +21,7 @@ class OnVaporized extends Event {}
 
 class OnCondensed extends Event {}
 
-@Sealed()
-abstract class SideEffect with SealedSideEffect {}
+abstract class SideEffect {}
 
 class LogMelted extends SideEffect {}
 
@@ -110,13 +105,13 @@ StateMachine<State, Event, SideEffect> _createMachine(
       ..state<Gas>((b) => b
         ..on<OnCondensed>((s, e) => b.transitionTo(Liquid(), LogCondensed())))
       ..onTransition((t) => t.match((v) {
-            final message = v.sideEffect?.match(
-              always(onMeltedMessage),
-              always(onFrozenMessage),
-              always(onVaporizedMessage),
-              always(onCondensedMessage),
-            );
-            if (message != null) watcher.log(message);
+            // final message = v.sideEffect?.match(
+            //   always(onMeltedMessage),
+            //   always(onFrozenMessage),
+            //   always(onVaporizedMessage),
+            //   always(onCondensedMessage),
+            // );
+            // if (message != null) watcher.log(message);
           }, ignore)));
 
 const onMeltedMessage = 'onMeltedMessage';

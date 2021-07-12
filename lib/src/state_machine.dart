@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dfunc/dfunc.dart';
 
 part 'graph.dart';
-
 part 'transition.dart';
 
 /// Finite State Machine implementation.
@@ -28,14 +27,14 @@ class StateMachine<STATE, EVENT, SIDE_EFFECT> {
   Transition<STATE, EVENT, SIDE_EFFECT> transition(EVENT event) {
     final fromState = _currentState;
     final transition = _getTransition(fromState, event);
-    _graph.onTransitionListeners.forEach((onTransition) {
-      onTransition(transition);
-    });
     transition.match((v) {
       _getOnStateExit(fromState)(fromState);
       _currentState = v.toState;
       _getOnStateEnter(v.toState)(v.toState);
       _controller.add(_currentState);
+      _graph.onTransitionListeners.forEach((onTransition) {
+        onTransition(transition);
+      });
     }, ignore);
     return transition;
   }

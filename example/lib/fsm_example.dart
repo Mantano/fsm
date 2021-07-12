@@ -1,7 +1,4 @@
-import 'package:dfunc/dfunc.dart';
 import 'package:fsm/fsm.dart';
-
-part 'fsm_example.g.dart';
 
 void main() {
   final machine = StateMachine<State, Event, SideEffect>.create((g) => g
@@ -30,8 +27,7 @@ void main() {
   print(machine.currentState is Solid); // TRUE
 }
 
-@sealed
-abstract class State with _$State {}
+abstract class State {}
 
 class Solid extends State {}
 
@@ -39,8 +35,7 @@ class Liquid extends State {}
 
 class Gas extends State {}
 
-@sealed
-abstract class Event with _$Event {}
+abstract class Event {}
 
 class OnMelted extends Event {}
 
@@ -50,8 +45,7 @@ class OnVaporized extends Event {}
 
 class OnCondensed extends Event {}
 
-@sealed
-abstract class SideEffect with _$SideEffect {}
+abstract class SideEffect {}
 
 class LogMelted extends SideEffect {}
 
