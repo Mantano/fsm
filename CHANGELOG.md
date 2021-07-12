@@ -1,3 +1,6 @@
+## 0.1.0
+- Support for dfunc 0.7.2 after it break compatibility with Coproduct2 classes.
+
 ## 0.0.5
 - Introduced stronger typing in builder methods.
 - Added onEnter and onExits state listeners.

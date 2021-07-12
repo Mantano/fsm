@@ -1,12 +1,14 @@
 A library for finite state machine realization in Dart. Inspired by [Tinder StateMachine library](https://github.com/Tinder/StateMachine).
 
+This library is a fork base on [https://github.com/ookami-kb/fsm](https://github.com/ookami-kb/fsm).
+
 ## Usage
 
 A simple usage example (using [dfunc](https://pub.dev/packages/dfunc) library for generating sealed classes):
 
 ```dart
 import 'package:dfunc/dfunc.dart';
-import 'package:fsm/fsm.dart';
+import 'package:mno_fsm/fsm.dart';
 
 part 'fsm_example.g.dart';
 
