@@ -1,4 +1,4 @@
-import 'package:mno_fsm/fsm.dart';
+import 'package:mno_fsm/mno_fsm.dart';
 
 void main() {
   final machine = StateMachine<State, Event, SideEffect>.create((g) => g

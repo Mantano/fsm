@@ -1,5 +1,5 @@
 import 'package:dfunc/dfunc.dart';
-import 'package:mno_fsm/fsm.dart';
+import 'package:mno_fsm/mno_fsm.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
