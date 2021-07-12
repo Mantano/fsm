@@ -1,6 +1,6 @@
-name: fsm
-description: A library for finite state machine realization in Dart. Inspired by Tinder StateMachine for Kotlin.
-version: 0.0.5
+name: mno_fsm
+description: A library for finite state machine realization in Dart. Inspired by Tinder StateMachine for Kotlin. This lib is compatible with dfunc 0.7.2
+version: 0.1.0
 homepage: https://github.com/ookami-kb/fsm
 
 environment:
