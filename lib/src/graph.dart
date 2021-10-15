@@ -23,14 +23,14 @@ class TransitionTo<STATE, SIDE_EFFECT> {
   TransitionTo._(this.toState, [this.sideEffect]);
 
   final STATE toState;
-  final SIDE_EFFECT sideEffect;
+  final SIDE_EFFECT? sideEffect;
 }
 
 /// Builder for FSM.
 ///
 /// Instance of this class is passed to [StateMachine.create] method.
 class GraphBuilder<STATE, EVENT, SIDE_EFFECT> {
-  STATE _initialState;
+  STATE? _initialState;
   final Map<Type, _State<STATE, EVENT, SIDE_EFFECT>> _stateDefinitions = {};
   final List<TransitionListener<STATE, EVENT, SIDE_EFFECT>>
       _onTransitionListeners = [];
@@ -52,8 +52,13 @@ class GraphBuilder<STATE, EVENT, SIDE_EFFECT> {
   void onTransition(TransitionListener<STATE, EVENT, SIDE_EFFECT> listener) =>
       _onTransitionListeners.add(listener);
 
-  Graph<STATE, EVENT, SIDE_EFFECT> build() =>
-      Graph(_initialState, _stateDefinitions, _onTransitionListeners);
+  Graph<STATE, EVENT, SIDE_EFFECT> build() {
+    if (_initialState == null) {
+      throw StateError("Initial state not defined");
+    } else {
+      return Graph(_initialState!, _stateDefinitions, _onTransitionListeners);
+    }
+  }
 }
 
 /// State builder.
@@ -67,23 +72,23 @@ class StateBuilder<S extends STATE, STATE, EVENT, SIDE_EFFECT> {
   void on<E extends EVENT>(
       CreateTransitionTo<S, STATE, E, EVENT, SIDE_EFFECT> createTransitionTo) {
     _stateDefinition.transitions[E] =
-        (STATE s, EVENT e) => createTransitionTo(s, e);
+        (STATE s, EVENT e) => createTransitionTo(s as S, e as E);
   }
 
   /// Sets callback that will be called right after machine enters this state.
   void onEnter(void Function(S) callback) {
-    _stateDefinition.onEnter = (STATE s) => callback(s);
+    _stateDefinition.onEnter = (STATE s) => callback(s as S);
   }
 
   /// Sets callback that will be called right before machine exits this state.
   void onExit(void Function(S) callback) {
-    _stateDefinition.onExit = (STATE s) => callback(s);
+    _stateDefinition.onExit = (STATE s) => callback(s as S);
   }
 
   /// Creates transition.
   TransitionTo<STATE, SIDE_EFFECT> transitionTo(
     STATE toState, [
-    SIDE_EFFECT sideEffect,
+    SIDE_EFFECT? sideEffect,
   ]) =>
       TransitionTo._(toState, sideEffect);
 

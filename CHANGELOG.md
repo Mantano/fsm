@@ -1,3 +1,6 @@
+## 0.1.1
+- Enabled null safety.
+
 ## 0.1.0
 - Support for dfunc 0.7.2 after it break compatibility with Coproduct2 classes.
 

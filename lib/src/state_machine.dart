@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dfunc/dfunc.dart';
 
 part 'graph.dart';
+
 part 'transition.dart';
 
 /// Finite State Machine implementation.
@@ -28,9 +29,11 @@ class StateMachine<STATE, EVENT, SIDE_EFFECT> {
     final fromState = _currentState;
     final transition = _getTransition(fromState, event);
     transition.match((v) {
-      _getOnStateExit(fromState)(fromState);
+      var onStateExit = _getOnStateExit(fromState);
+      onStateExit?.call(fromState);
       _currentState = v.toState;
-      _getOnStateEnter(v.toState)(v.toState);
+      var onStateEnter = _getOnStateEnter(v.toState);
+      onStateEnter?.call(v.toState);
       _controller.add(_currentState);
       _graph.onTransitionListeners.forEach((onTransition) {
         onTransition(transition);
@@ -54,21 +57,21 @@ class StateMachine<STATE, EVENT, SIDE_EFFECT> {
   Transition<S, E, SIDE_EFFECT>
       _getTransition<S extends STATE, E extends EVENT>(S state, E event) {
     final createTransitionTo = _graph
-        .stateDefinitions[state.runtimeType].transitions[event.runtimeType];
+        .stateDefinitions[state.runtimeType]?.transitions[event.runtimeType];
     if (createTransitionTo == null) return Transition.invalid(state, event);
 
     final transition = createTransitionTo(state, event);
     return Transition.valid(
       state,
       event,
-      transition.toState,
+      transition.toState as S,
       transition.sideEffect,
     );
   }
 
-  VoidCallback<S> _getOnStateEnter<S extends STATE>(S state) =>
-      _graph.stateDefinitions[state.runtimeType].onEnter;
+  VoidCallback<S>? _getOnStateEnter<S extends STATE>(S state) =>
+      _graph.stateDefinitions[state.runtimeType]?.onEnter;
 
-  VoidCallback<S> _getOnStateExit<S extends STATE>(S state) =>
-      _graph.stateDefinitions[state.runtimeType].onExit;
+  VoidCallback<S>? _getOnStateExit<S extends STATE>(S state) =>
+      _graph.stateDefinitions[state.runtimeType]?.onExit;
 }

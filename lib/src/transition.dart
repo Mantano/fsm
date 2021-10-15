@@ -11,7 +11,7 @@ class Transition<STATE, EVENT, SIDE_EFFECT> {
     STATE fromState,
     EVENT event,
     STATE toState,
-    SIDE_EFFECT sideEffect,
+    SIDE_EFFECT? sideEffect,
   ) : this._(Coproduct2.item1(Valid(fromState, event, toState, sideEffect)));
 
   Transition.invalid(STATE state, EVENT event)
@@ -37,7 +37,7 @@ class Valid<STATE, EVENT, SIDE_EFFECT> {
   final STATE fromState;
   final EVENT event;
   final STATE toState;
-  final SIDE_EFFECT sideEffect;
+  final SIDE_EFFECT? sideEffect;
 
   @override
   String toString() =>
