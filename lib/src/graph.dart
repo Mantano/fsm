@@ -4,13 +4,13 @@ class Graph<STATE, EVENT, SIDE_EFFECT> {
   Graph(this.initialState, this.stateDefinitions, this.onTransitionListeners);
 
   final STATE initialState;
-  final Map<Type, _State<STATE, EVENT, SIDE_EFFECT>> stateDefinitions;
+  final Map<Type, State<STATE, EVENT, SIDE_EFFECT>> stateDefinitions;
   final List<TransitionListener<STATE, EVENT, SIDE_EFFECT>>
       onTransitionListeners;
 }
 
-class _State<STATE, EVENT, SIDE_EFFECT> {
-  _State();
+class State<STATE, EVENT, SIDE_EFFECT> {
+  State();
 
   final Map<Type, TransitionTo<STATE, SIDE_EFFECT> Function(STATE, EVENT)>
       transitions = {};
@@ -31,7 +31,7 @@ class TransitionTo<STATE, SIDE_EFFECT> {
 /// Instance of this class is passed to [StateMachine.create] method.
 class GraphBuilder<STATE, EVENT, SIDE_EFFECT> {
   STATE? _initialState;
-  final Map<Type, _State<STATE, EVENT, SIDE_EFFECT>> _stateDefinitions = {};
+  final Map<Type, State<STATE, EVENT, SIDE_EFFECT>> _stateDefinitions = {};
   final List<TransitionListener<STATE, EVENT, SIDE_EFFECT>>
       _onTransitionListeners = [];
 
@@ -53,10 +53,11 @@ class GraphBuilder<STATE, EVENT, SIDE_EFFECT> {
       _onTransitionListeners.add(listener);
 
   Graph<STATE, EVENT, SIDE_EFFECT> build() {
-    if (_initialState == null) {
+    var initialState = _initialState;
+    if (initialState == null) {
       throw StateError("Initial state not defined");
     } else {
-      return Graph(_initialState!, _stateDefinitions, _onTransitionListeners);
+      return Graph(initialState, _stateDefinitions, _onTransitionListeners);
     }
   }
 }
@@ -65,7 +66,7 @@ class GraphBuilder<STATE, EVENT, SIDE_EFFECT> {
 ///
 /// Instance of this class is passed to [GraphBuilder.state] method.
 class StateBuilder<S extends STATE, STATE, EVENT, SIDE_EFFECT> {
-  final _State<STATE, EVENT, SIDE_EFFECT> _stateDefinition = _State();
+  final State<STATE, EVENT, SIDE_EFFECT> _stateDefinition = State();
 
   /// Sets transition that will be called when event of type [E]
   /// is sent to machine via [StateMachine.transition] method.
@@ -92,7 +93,7 @@ class StateBuilder<S extends STATE, STATE, EVENT, SIDE_EFFECT> {
   ]) =>
       TransitionTo._(toState, sideEffect);
 
-  _State<STATE, EVENT, SIDE_EFFECT> build() => _stateDefinition;
+  State<STATE, EVENT, SIDE_EFFECT> build() => _stateDefinition;
 }
 
 typedef CreateTransitionTo<S extends STATE, STATE, E extends EVENT, EVENT,

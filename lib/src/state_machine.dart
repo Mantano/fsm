@@ -35,9 +35,10 @@ class StateMachine<STATE, EVENT, SIDE_EFFECT> {
       var onStateEnter = _getOnStateEnter(v.toState);
       onStateEnter?.call(v.toState);
       _controller.add(_currentState);
-      _graph.onTransitionListeners.forEach((onTransition) {
+      for (TransitionListener<STATE, EVENT, SIDE_EFFECT> onTransition
+          in _graph.onTransitionListeners) {
         onTransition(transition);
-      });
+      }
     }, ignore);
     return transition;
   }
