@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dfunc/dfunc.dart';
+// import 'package:dfunc/dfunc.dart';
 
 part 'graph.dart';
 
@@ -28,18 +28,22 @@ class StateMachine<STATE, EVENT, SIDE_EFFECT> {
   Transition<STATE, EVENT, SIDE_EFFECT> transition(EVENT event) {
     final fromState = _currentState;
     final transition = _getTransition(fromState, event);
-    transition.match((v) {
-      var onStateExit = _getOnStateExit(fromState);
-      onStateExit?.call(fromState);
-      _currentState = v.toState;
-      var onStateEnter = _getOnStateEnter(v.toState);
-      onStateEnter?.call(v.toState);
-      _controller.add(_currentState);
-      _graph.onTransitionListeners.forEach((onTransition) {
-        onTransition(transition);
-      });
-    }, ignore);
-    return transition;
+
+    switch(transition._value) {
+      case Invalid _:
+        return transition;
+      case Valid v:
+        var onStateExit = _getOnStateExit(fromState);
+        onStateExit?.call(fromState);
+        _currentState = v.toState;
+        var onStateEnter = _getOnStateEnter<STATE>(v.toState);
+        onStateEnter?.call(v.toState);
+        _controller.add(_currentState);
+        for (var onTransition in _graph.onTransitionListeners) {
+          onTransition(transition);
+        }
+        return transition;
+    }
   }
 
   /// Returns current state.

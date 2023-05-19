@@ -1,4 +1,3 @@
-import 'package:dfunc/dfunc.dart';
 import 'package:mno_fsm/mno_fsm.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -104,15 +103,21 @@ StateMachine<State, Event, SideEffect> _createMachine(
         ..on<OnVaporized>((s, e) => b.transitionTo(Gas(), LogVaporized())))
       ..state<Gas>((b) => b
         ..on<OnCondensed>((s, e) => b.transitionTo(Liquid(), LogCondensed())))
-      ..onTransition((t) => t.match((v) {
-            // final message = v.sideEffect?.match(
-            //   always(onMeltedMessage),
-            //   always(onFrozenMessage),
-            //   always(onVaporizedMessage),
-            //   always(onCondensedMessage),
-            // );
-            // if (message != null) watcher.log(message);
-          }, ignore)));
+      ..onTransition((t) {
+        final message = switch(t.value.sideEffect) {
+          LogMelted =>
+            onMeltedMessage,
+          LogFrozen =>
+            onFrozenMessage,
+          LogVaporized =>
+            onVaporizedMessage,
+          LogCondensed =>
+            onCondensedMessage,
+          _ =>
+            null
+        };
+        if (message != null) watcher.log(message);
+      }));
 
 const onMeltedMessage = 'onMeltedMessage';
 const onFrozenMessage = 'onFrozenMessage';

@@ -16,7 +16,12 @@ void main() {
     ..state<Gas>((b) => b
       ..on<OnCondensed>(
           (Gas s, OnCondensed e) => b.transitionTo(Liquid(), LogCondensed())))
-    ..onTransition((t) => t.match((v) => print(v.sideEffect), (_) {})));
+    ..onTransition((t) {
+      switch (t.value) {
+        case Valid v:
+          print(v.sideEffect);
+      }
+    }));
 
   print(machine.currentState is Solid); // TRUE
 
