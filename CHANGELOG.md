@@ -1,3 +1,6 @@
+## 0.2.3
+- Fixing auto publish issues.
+
 ## 0.2.0
 - Migrated to Dart 3.0.0.
 
