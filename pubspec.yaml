@@ -1,6 +1,6 @@
 name: mno_fsm
 description: ^0.9.0
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/mantano/fsm
 
 environment:
