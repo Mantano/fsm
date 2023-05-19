@@ -1,3 +1,6 @@
+## 0.2.0
+- Migrated to Dart 3.0.0.
+
 ## 0.1.2
 - Upgrade dependencies, mainly dfunc 0.8.0.
 
